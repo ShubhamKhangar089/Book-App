@@ -3,6 +3,9 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path'
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const getUsers = async(req,res)=>{
 try{
@@ -88,23 +91,24 @@ export const deleteUser = async(req,res)=>{
     }
 }
 
-// -------------edited now-------
+// -----------edited now-------
 
 //download
 export const downloadBook = async(req, res) => {
     try {
-      const book = await bookModel.findById(req.params.id);
-      if (!book) {
-        return res.status(404).json({ error: 'Book not found' });
+        const book = await bookModel.findById(req.params.id);
+        if (!book) {
+          return res.status(404).json({ error: 'Book not found' });
+        }
+        const pdfPath = path.join(__dirname, '../uploads', `${book.title}.pdf`);
+        if (fs.existsSync(pdfPath)) {
+            console.log(`Looking for file at path: ${pdfPath}`); 
+          res.download(pdfPath);
+        } else {
+            console.error(`File not found at path: ${pdfPath}`);
+          res.status(404).json({ error: 'PDF file not found' });
+        }
+      } catch (err) {
+        res.status(500).json({ error: err.message });
       }
-      
-      const pdfPath = path.join(__dirname, '../uploads', `${book.title}.pdf`);
-      if (fs.existsSync(pdfPath)) {
-        res.download(pdfPath);
-      } else {
-        res.status(404).json({ error: 'PDF file not found' });
-      }
-    } catch (err) {
-      res.status(500).json({ error: err.message });
     }
-  };

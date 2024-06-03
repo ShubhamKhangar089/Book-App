@@ -21,4 +21,4 @@ bookRouter.patch('/:id',role_access(["admin", "user"]), updateBook);
 bookRouter.delete('/:id',role_access(["admin", "user"]), deleteBook);
 
 //download by id
-bookRouter.get('/:id/download',role_access(["admin"], downloadBook ))
+bookRouter.get('/:id/download',role_access(["admin"]), downloadBook);
