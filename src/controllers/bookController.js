@@ -4,7 +4,7 @@ import { bookModel } from "../models/bookModel.js";
 export const getAllBooks = async(req,res) =>{
     try {
         const getBooks = await bookModel.find();
-        res.status(200).json({success : true, Books : getBooks });
+        res.status(200).json({success : true, book : getBooks });
     } catch (error) {
     console.log("error while getBooks :", error.message);
     res.status(500).json({message : " error while getBooks"}) 
@@ -30,7 +30,7 @@ export const createBook = async(req,res)=>{
     const createBook = new bookModel({title,author,frontPageUrl,backPageUrl,pages,userId})
     await createBook.save();
     console.log("successfully created book");
-    res.status(201).json({message :"Book created successfully" , books : createBook})
+    res.status(201).json({message :"Book created successfully" , book : createBook})
 
   }catch (error){
     console.log("error while creating new book :", error.message);
@@ -42,7 +42,7 @@ export const createBook = async(req,res)=>{
 export const updateBook = async(req,res)=>{
     try {
         const book =  await bookModel.findByIdAndUpdate(req.params.id , req.body);
-        res.status(201).json({message : "book updated successfully",book : book})
+        res.status(201).json({message : "book updated successfully", book : book})
     } catch (error) {
         console.log("error :", error.message);
         res.status(500).json({message : "error while making update book request"})

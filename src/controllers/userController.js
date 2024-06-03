@@ -30,7 +30,7 @@ export const getUserRegister= async(req,res)=>{
             //update hash password to password filed
             const user = new userModel({userName, email, password : result, roles});
             await user.save();
-            return res.status(201).json({message :"user registered successfully", user : user})
+            return res.status(201).json({message :"user registered successfully", users : user})
         });   
     } catch (error) {
         console.log("error while getUserRegister request");
