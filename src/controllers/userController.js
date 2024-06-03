@@ -1,6 +1,8 @@
 import { userModel } from "../models/userModel.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path'
 
 export const getUsers = async(req,res)=>{
 try{
@@ -85,3 +87,24 @@ export const deleteUser = async(req,res)=>{
         res.json({message : error.message}) 
     }
 }
+
+// -------------edited now-------
+
+//download
+export const downloadBook = async(req, res) => {
+    try {
+      const book = await bookModel.findById(req.params.id);
+      if (!book) {
+        return res.status(404).json({ error: 'Book not found' });
+      }
+      
+      const pdfPath = path.join(__dirname, '../uploads', `${book.title}.pdf`);
+      if (fs.existsSync(pdfPath)) {
+        res.download(pdfPath);
+      } else {
+        res.status(404).json({ error: 'PDF file not found' });
+      }
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };

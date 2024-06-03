@@ -1,6 +1,7 @@
 import express from 'express';
 import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from '../controllers/bookController.js';
 import role_access from '../middlewares/role.js';
+import { downloadBook } from '../controllers/userController.js';
 
 export const bookRouter = express.Router();
 
@@ -18,3 +19,6 @@ bookRouter.patch('/:id',role_access(["admin", "user"]), updateBook);
 
 //delete book by id
 bookRouter.delete('/:id',role_access(["admin", "user"]), deleteBook);
+
+//download by id
+bookRouter.get('/:id/download',role_access(["admin"], downloadBook ))
